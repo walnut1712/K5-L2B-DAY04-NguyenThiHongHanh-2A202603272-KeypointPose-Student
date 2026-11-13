@@ -6,7 +6,7 @@ Dữ liệu: 12 ảnh người COCO 2017 và 8 ảnh khuôn mặt theo bộ ản
 
 - Họ tên: Nguyen Thi Hong Hanh
 - MSSV: 2A202603272
-- Email: 26.
+- Email:  26ai.hanhnth@vinuni.edu.vn
 - Link repository: https://github.com/walnut1712/K5-L2B-NguyenThiHongHanh-2A202603272-KeypointPose-Student
 - Phiên bản CVAT (Help → About): 2.74.1
 - Máy: Windows · RAM 16 · CVAT chế độ: Local
@@ -48,19 +48,19 @@ Cách đổi cờ `occluded` / `outside` cho một điểm trên phiên bản CV
 
 Tự ghi các trường hợp phân vân khi gán; các dòng dưới là trường hợp thật xuất hiện trong job.
 
-| Ảnh | Người / mặt | Điểm | Cờ đã chọn | Phân vân giữa | Lý do chọn |
+| Ảnh | Người / mặt | Điểm | Cờ đã chọn (`v`) | Phân vân giữa | Lý do chọn |
 |---|---|---|---:|---|---|
-| `000000193879.jpg` | Người | `ankle` | `outside` / `occluded` | `left` và `right` | Chân tiến thoái lệch và bắt chéo với nhau; cần kiểm tra theo hướng thực tế để tránh hướng ngược. |
-| `000000521817.jpg` | Người | `eye`, `knee` | `outside` / `occluded` | `left` / `right` | Người nghiêng và quay mặt lệch; mắt và đầu gối có vẻ đổi trái-phải nếu dựa vào chiều khung hình mà không xem tư thế thật. |
+| `000000193879.jpg` | Người | `ankle` | `v = 2` | Bên trái / bên phải | Chân bắt chéo; đối chiếu tư thế toàn thân và giữ nhãn theo bên thực của người. |
+| `000000521817.jpg` | Người | `eye`, `knee` | `v = 2` | Bên trái / bên phải | Người nghiêng và quay mặt lệch; kiểm tra theo hướng cơ thể thay vì chiều khung hình. |
 
 ## 4. Bảng tự review (CP3)
 
-Tự review 5 ảnh người (ít nhất 2 ảnh `back` hoặc `crowd`) và 3 ảnh mặt, ghi lỗi trước khi sửa. Dùng mã `lr_swap`, `vis_flag`, `position`, `missing`, `extra`, hoặc `ok`.
+Tự review 5 ảnh người (ít nhất 2 ảnh `back` hoặc `crowd`) và 3 ảnh mặt. Dùng mã `lr_swap`, `vis_flag`, `position`, `missing`, `extra`, hoặc `ok`; nếu checker cảnh báo nhưng kiểm tra ảnh xác nhận nhãn đúng thì ghi `ok` và nêu lý do giữ nguyên.
 
 | Ảnh | Người / mặt | Điểm | Mã lỗi | Ghi chú | Đã sửa? |
 |---|---|---|---|---|---|
-| `000000193879.jpg` | Người | `ankle` | `lr_swap` | Cặp ankle nằm ngược phía so với các cặp còn lại; kiểm tra lại theo tư thế chân bắt chéo. | Có |
-| `000000521817.jpg` | Người | `eye`, `knee` | `lr_swap` | Mắt và đầu gối lệch trái-phải khi người nghiêng và quay mặt. | Có |
+| `000000193879.jpg` | Người | `ankle` | `ok` | Checker cảnh báo cặp ankle ngược phía; kiểm tra lại trên CVAT xác nhận do chân bắt chéo thật, nên giữ nguyên nhãn. | Không (đã kiểm tra) |
+| `000000521817.jpg` | Người | `eye`, `knee` | `ok` | Checker cảnh báo các cặp lệch phía; kiểm tra lại trên CVAT xác nhận do người nghiêng và quay mặt, nên giữ nguyên nhãn. | Không (đã kiểm tra) |
 | `000000130816.jpg` | Người | `wrist` | `position` | Vị trí cổ tay lệch vì tay che thân và bị méo khi xem vội. | Có |
 | `000000311497.jpg` | Người | `hip` | `position` | Hông lệch khá nhiều do ảnh có góc nghiêng; cần căn vuông góc với đường thân. | Có |
 | `000000351176.jpg` | Người | `all` | `ok` | Hình ảnh tương đối rõ, vẫn giữ đúng vị trí và cờ. | Có |
@@ -72,7 +72,7 @@ Tổng hợp số lỗi theo mã:
 
 | `lr_swap` | `vis_flag` | `position` | `missing` | `extra` | `ok` |
 |---:|---:|---:|---:|---:|---:|
-| 2 | 0 | 2 | 0 | 0 | 4 |
+| 0 | 0 | 3 | 0 | 0 | 5 |
 
 Điểm còn phân vân giữa `v = 1` và `v = 0` (ghi cả hai lựa chọn và lý do chọn): `000000193879.jpg` có thể chọn `v = 1` cho `ankle` bị che hoặc lệch ngoài khung, nhưng vì chân vẫn còn nhìn thấy rõ và nằm trong khung nên giữ `v = 2`; tương tự với `000000521817.jpg`, các điểm mắt và đầu gối gần như nhìn rõ nên ưu tiên `v = 2` thay vì `v = 0`/`v = 1`.
 
